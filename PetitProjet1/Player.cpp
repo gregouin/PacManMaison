@@ -17,94 +17,124 @@ Player::Player()
 	m_targetPosition = { 1,1 };
 	t = { 0.04f,0.04f };
 	m_score = 0;
+	m_dir = none;
 }
 
-void Player::targetTo(const Direction& dir, Tilemap& tilemap)
+void Player::targetTo(const Direction& dir)
 {
 	sf::Vector2i currentTile(
 		static_cast<int>(std::round(m_position.x / 40.0f)),
 		static_cast<int>(std::round(m_position.y / 40.0f))
 	);
 
-	if (currentTile != m_targetPosition) {
+	//lerp = { 0,0 };
+	if (dir==m_dir)
+	{
 		return;
 	}
-
-	lerp = { 0,0 };
-
 	switch (dir)
 	{
 	case Player::north:
-		m_targetPosition.y--;
-		if (tilemap.IsAWall(m_targetPosition))
-		{
-			m_targetPosition.y++;
-		}
-		if (tilemap.IsACoin(m_targetPosition))
-		{
-			TakeACoin(tilemap);
-		}
+		m_dir = north;
+		m_targetPosition = currentTile;
 		break;
 	case Player::south:
-		m_targetPosition.y++;
-		if (tilemap.IsAWall(m_targetPosition))
-		{
-			m_targetPosition.y--;
-		}
-		if (tilemap.IsACoin(m_targetPosition))
-		{
-			TakeACoin(tilemap);
-		}
+		m_dir = south;
+		m_targetPosition = currentTile;
 		break;
 	case Player::east:
-		m_targetPosition.x--;
-		if (m_targetPosition.x <= -1)
-		{
-			m_targetPosition.x = 18;
-			m_position.x = 18 * 40;
-			m_sprite.setPosition(m_position);
-			return;
-		}
-		if (tilemap.IsAWall(m_targetPosition))
-		{
-			m_targetPosition.x++;
-		}
-		if (tilemap.IsACoin(m_targetPosition))
-		{
-			TakeACoin(tilemap);
-		}
-		
-		
+		m_dir = east;
+		m_targetPosition = currentTile;
 		break;
 	case Player::west:
-
-		m_targetPosition.x++;
-		if (m_targetPosition.x >= 19)
-		{
-			m_targetPosition.x = 0;
-			m_position.x = 0;
-			m_sprite.setPosition(m_position);
-			return;
-		}
-		if (tilemap.IsAWall(m_targetPosition))
-		{
-			m_targetPosition.x--;
-		}
-		if (tilemap.IsACoin(m_targetPosition))
-		{
-			TakeACoin(tilemap);
-			
-		}
-		
+		m_dir = west;
+		m_targetPosition = currentTile;
 		break;
 	default:
 		break;
 	}
-	
+
 }
 
-void Player::move()
+void Player::move(Tilemap& tilemap)
 {
+	sf::Vector2i currentTile(
+		static_cast<int>(std::round(m_position.x / 40.0f)),
+		static_cast<int>(std::round(m_position.y / 40.0f))
+	);
+
+	if (currentTile == m_targetPosition) {
+		switch (m_dir)
+		{
+		case Player::north:
+			m_targetPosition.y--;
+			if (tilemap.IsAWall(m_targetPosition))
+			{
+				m_targetPosition.y++;
+			}
+			if (tilemap.IsACoin(m_targetPosition))
+			{
+				TakeACoin(tilemap);
+			}
+			break;
+		case Player::south:
+			m_targetPosition.y++;
+			if (tilemap.IsAWall(m_targetPosition))
+			{
+				m_targetPosition.y--;
+			}
+			if (tilemap.IsACoin(m_targetPosition))
+			{
+				TakeACoin(tilemap);
+			}
+			break;
+		case Player::east:
+			m_targetPosition.x--;
+			if (m_targetPosition.x <= -1)
+			{
+				m_targetPosition.x = 18;
+				m_position.x = 18 * 40;
+				m_sprite.setPosition(m_position);
+				return;
+			}
+			if (tilemap.IsAWall(m_targetPosition))
+			{
+				m_targetPosition.x++;
+			}
+			if (tilemap.IsACoin(m_targetPosition))
+			{
+				TakeACoin(tilemap);
+			}
+
+
+			break;
+		case Player::west:
+			m_targetPosition.x++;
+			if (m_targetPosition.x >= 19)
+			{
+				m_targetPosition.x = 0;
+				m_position.x = 0;
+				m_sprite.setPosition(m_position);
+				return;
+			}
+			if (tilemap.IsAWall(m_targetPosition))
+			{
+				m_targetPosition.x--;
+			}
+			if (tilemap.IsACoin(m_targetPosition))
+			{
+				TakeACoin(tilemap);
+
+			}
+
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
+
 
 	sf::Vector2f b(m_targetPosition.x * 40.0f, m_targetPosition.y * 40.0f);
 	sf::Vector2f delta = b - m_position;

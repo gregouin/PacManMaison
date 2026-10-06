@@ -13,6 +13,7 @@ private :
 	sf::Vector2f t;
 	sf::Vector2f lerp;
 	sf::Vector2i m_targetPosition;
+	
 
 	int m_score;
 	
@@ -24,12 +25,14 @@ public :
 		north = 0,
 		south = 1,
 		east = 2,
-		west = 3
+		west = 3,
+		none = 4
 
 	};
+	Direction m_dir;
 	Player();
-	void targetTo(const Direction& dir,Tilemap& tilemap);
-	void move();
+	void targetTo(const Direction& dir);
+	void move(Tilemap& tilemap);
 	sf::CircleShape GetSprite();
 	sf::Vector2f getPos();
 	sf::Vector2i getTargetPos();

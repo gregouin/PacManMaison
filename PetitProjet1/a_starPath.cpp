@@ -52,8 +52,6 @@ Direction nextDirection(sf::Vector2i start, sf::Vector2i end, std::array<std::st
         for (sf::Vector2i dir : Direction)
         {
             sf::Vector2i voisin = { actuel.x + dir.x,actuel.y + dir.y };
-
-
             if (voisin.y >=0 && voisin.y<hauteur &&
                 voisin.x >= 0 && voisin.x < largeur &&
                 map[voisin.y][voisin.x] != '#')

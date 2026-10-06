@@ -26,8 +26,6 @@ private:
 	sf::Vector2f tt;
 	sf::Vector2f lerp;
 
-	Player m_player;
-
 	bool IsAlive;
 
 
@@ -37,7 +35,7 @@ public:
 	sf::RectangleShape GetSprite() const;
 	void move(sf::Vector2i targetpos);
 	
-	Ennemy(const Couleur& couleur, Player& player) ;
+	Ennemy(const Couleur& couleur) ;
 	~Ennemy();
 
 

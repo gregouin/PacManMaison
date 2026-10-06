@@ -14,8 +14,8 @@ int main()
     sf::VertexArray map = testmap.LoadMap();
     Player player;
 
-    //sf::Font font("C:/Users/g.piret/Desktop/Projet/PetitProjet1/Asset/Font/score.ttf");
-    sf::Font font("C:/Users/gregx/Downloads/PetitProjet1-master/PetitProjet1-master/Asset/Font/score.ttf");
+    sf::Font font("C:/Users/g.piret/Desktop/Projet/PetitProjet1/Asset/Font/score.ttf");
+    //sf::Font font("C:/Users/gregx/Downloads/PetitProjet1-master/PetitProjet1-master/Asset/Font/score.ttf");
     sf::Text Score(font);
 
     Score.setString(std::to_string(player.getScore()));
@@ -28,30 +28,30 @@ int main()
     
     sf::Clock moveTime;
 
-    Ennemy Blinky(Couleur::rouge,player);
+    Ennemy Blinky(Couleur::rouge);
 
     while (window.isOpen())
     {
         Score.setString(std::to_string(player.getScore()));
         while (const std::optional event = window.pollEvent())
         {
-            if (moveTime.getElapsedTime().asMilliseconds()>=200)
+            if (moveTime.getElapsedTime().asMilliseconds()>=10)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
                 {
-                    player.targetTo(player.west,testmap);
+                    player.targetTo(player.west);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
                 {
-                    player.targetTo(player.east,testmap);
+                    player.targetTo(player.east);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z))
                 {
-                    player.targetTo(player.north,testmap);
+                    player.targetTo(player.north);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
                 {
-                    player.targetTo(player.south,testmap);
+                    player.targetTo(player.south);
                 }
                 moveTime.restart();
             }
@@ -61,7 +61,7 @@ int main()
                 window.close();
         }
 
-        player.move();
+        player.move(testmap);
         Blinky.move(player.getTargetPos());
         window.clear(sf::Color::Black);
         window.draw(map);

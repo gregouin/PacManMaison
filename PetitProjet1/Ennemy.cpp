@@ -2,6 +2,7 @@
 #include <cmath>
 #include "a_starPath.h"
 #include "tilemap.h"
+#include <SFML/Graphics.hpp>
 
 sf::RectangleShape Ennemy::GetSprite() const
 {
@@ -14,6 +15,19 @@ void Ennemy::move(sf::Vector2i targetPos)
 	sf::Vector2f b(m_nextPosition.x * 40.0f, m_nextPosition.y * 40.0f);
 	sf::Vector2f delta = b - m_pos;
 
+
+	if (m_nextPosition.x<=0 && m_nextPosition.y == 9)
+	{
+		m_pos = sf::Vector2f(18 * 40, 9*40);
+		m_sprite.setPosition(m_pos);
+		m_nextPosition = sf::Vector2i(17, 9);
+	}
+	if (m_nextPosition.x >= 18 && m_nextPosition.y ==9)
+	{
+		m_pos = sf::Vector2f(0 * 40, 9 * 40);
+		m_sprite.setPosition(m_pos);
+		m_nextPosition = sf::Vector2i(1, 9);
+	}
 	float vitesse = 1.7f;
 
 	if (std::abs(delta.x) > vitesse || std::abs(delta.y) > vitesse) {
@@ -35,6 +49,16 @@ void Ennemy::move(sf::Vector2i targetPos)
 
 	Direction dir = nextDirection(m_nextPosition, targetPos, Tilemap().GetCodeMap());
 
+	if (currentTile.x >= 0 && currentTile.x <= 5 && currentTile.y ==9 && dir == Direction::East && targetPos.x > 11)
+	{
+		m_nextPosition.x--;
+		return;
+	}
+	if (currentTile.x >= 13 && currentTile.x <= 18 && currentTile.y == 9 && dir == Direction::West && targetPos.x < 7)
+	{
+		m_nextPosition.x++;
+		return;
+	}
 	switch (dir)
 	{
 	case Direction::North:
@@ -58,7 +82,7 @@ void Ennemy::move(sf::Vector2i targetPos)
 }
 
 
-Ennemy::Ennemy(const Couleur& couleur, Player& player) : m_player(player), IsAlive(false), m_nextPosition(10,10)
+Ennemy::Ennemy(const Couleur& couleur) : IsAlive(false), m_nextPosition(10,10)
 {
 
 
