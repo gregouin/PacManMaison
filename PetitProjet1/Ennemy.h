@@ -2,19 +2,38 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 
-enum Couleur
-{
-	rouge = 0,
-	rose = 1,
-	bleu = 2,
-	orange = 3
 
-};
 
 
 class Ennemy
 {
+
+
+public:
+
+	sf::RectangleShape GetSprite() const;
+	void move(const Player& player, const Ennemy& Blinky);
+
+	void IsDead(const Player& player);
+
+	sf::Vector2i getCurrentPos() const;
+	
+	enum Couleur
+	{
+		rouge = 0,
+		rose = 1,
+		bleu = 2,
+		orange = 3
+
+	};
+
+	Ennemy(const Couleur& couleur) ;
+	~Ennemy();
+
 private:
+
+	Couleur who;
+
 	sf::Vector2f m_pos;
 
 	sf::RectangleShape m_sprite;
@@ -27,16 +46,6 @@ private:
 	sf::Vector2f lerp;
 
 	bool IsAlive;
-
-
-
-public:
-
-	sf::RectangleShape GetSprite() const;
-	void move(sf::Vector2i targetpos);
-	
-	Ennemy(const Couleur& couleur) ;
-	~Ennemy();
 
 
 };

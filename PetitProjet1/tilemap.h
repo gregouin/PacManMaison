@@ -14,6 +14,7 @@ public:
 	sf::VertexArray LoadMap();
 	bool IsAWall(const sf::Vector2i& pos);
 	bool IsACoin(const sf::Vector2i& pos);
+	bool IsAPacGum(const sf::Vector2i& pos);
 	std::array<std::string, 20>& GetCodeMap();
 	
 

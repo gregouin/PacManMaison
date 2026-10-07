@@ -17,7 +17,7 @@ Direction nextDirection(sf::Vector2i start, sf::Vector2i end, std::array<std::st
     explore.push_back(start); 
     std::vector<std::vector<int>> g(hauteur, std::vector<int>(largeur, 400));
     std::vector<std::vector<sf::Vector2i>> parent(hauteur, std::vector<sf::Vector2i>(largeur, sf::Vector2i(-1, -1)));
-
+     
     g[start.y][start.x] = 0;
 
     while (!explore.empty())

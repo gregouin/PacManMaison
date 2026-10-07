@@ -4,7 +4,7 @@ Tilemap::Tilemap()
 {
     m_codeMap = {
     "###################",
-    "#  ..... #        #",
+    "#0 ..... #       0#",
     "# ## ### # ### ## #",
     "# ## ### # ### ## #",
     "#                 #",
@@ -49,30 +49,20 @@ sf::VertexArray Tilemap::LoadMap()
             triangles[5].position = sf::Vector2f((i + 1) * size, (j + 1) * size);
 
 
-            switch (m_codeMap[j][i]) {
-            case '#':
-                for (int x = 0; x < 6; x++)
+                if (m_codeMap[j][i]=='#')
                 {
-                    triangles[x].color = sf::Color::Blue;
+                    for (int x = 0; x < 6; x++)
+                    {
+                        triangles[x].color = sf::Color::Blue;
+                    }
                 }
-                break;
-            case '.':
-                for (int x = 0; x < 6; x++)
+                else
                 {
-                    triangles[x].color = sf::Color::Black;
+                    for (int x = 0; x < 6; x++)
+                    {
+                        triangles[x].color = sf::Color::Black;
+                    }
                 }
-                
-                break;
-            case '0':
-               
-                break;
-            default:
-                for (int x = 0; x < 6; x++)
-                {
-                    triangles[x].color = sf::Color::Black;
-                }
-                break;
-            }
         }
     }
 
@@ -92,6 +82,15 @@ bool Tilemap::IsAWall(const sf::Vector2i& pos)
 bool Tilemap::IsACoin(const sf::Vector2i& pos)
 {
     if (m_codeMap[pos.y][pos.x] == '.')
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Tilemap::IsAPacGum(const sf::Vector2i& pos)
+{
+    if (m_codeMap[pos.y][pos.x] == '0')
     {
         return true;
     }

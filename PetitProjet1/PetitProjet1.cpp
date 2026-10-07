@@ -25,10 +25,17 @@ int main()
     sf::CircleShape Coin;
     Coin.setRadius(5);
     Coin.setFillColor(sf::Color::Yellow);
+
+    sf::CircleShape PacGum;
+    PacGum.setRadius(8);
+    PacGum.setFillColor(sf::Color::Yellow);
     
     sf::Clock moveTime;
 
-    Ennemy Blinky(Couleur::rouge);
+    Ennemy Blinky(Ennemy::Couleur::rouge);
+    Ennemy Pinky(Ennemy::Couleur::rose);
+    Ennemy Inky(Ennemy::Couleur::bleu);
+
 
     while (window.isOpen())
     {
@@ -62,7 +69,13 @@ int main()
         }
 
         player.move(testmap);
-        Blinky.move(player.getTargetPos());
+        Blinky.move(player,Blinky);
+        Pinky.move(player,Blinky);
+        Inky.move(player, Blinky);
+
+        Pinky.IsDead(player);
+        Blinky.IsDead(player);
+        Inky.IsDead(player);
         window.clear(sf::Color::Black);
         window.draw(map);
         window.draw(player.GetSprite());
@@ -75,10 +88,18 @@ int main()
                     window.draw(Coin);
                     
                 }
+                else if (testmap.GetCodeMap()[x][i] == '0')
+                {
+                    PacGum.setPosition(sf::Vector2f(i * 40 + 12, x * 40 + 12));
+                    window.draw(PacGum);
+
+                }
             }
         }
         window.draw(Score);
         window.draw(Blinky.GetSprite());
+        window.draw(Pinky.GetSprite());
+        window.draw(Inky.GetSprite());
         window.display();
     }
 }

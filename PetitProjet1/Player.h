@@ -10,14 +10,16 @@ class Player
 private : 
 	sf::Vector2f m_position;
 	sf::CircleShape m_sprite;
-	sf::Vector2f t;
-	sf::Vector2f lerp;
 	sf::Vector2i m_targetPosition;
 	
 
 	int m_score;
+
+	bool canAttack;
+	sf::Clock CoolDown;
 	
 	void TakeACoin(Tilemap& tilemap);
+	void TakeAPacGum(Tilemap& tilemap);
 
 public :
 	enum Direction
@@ -33,9 +35,12 @@ public :
 	Player();
 	void targetTo(const Direction& dir);
 	void move(Tilemap& tilemap);
-	sf::CircleShape GetSprite();
-	sf::Vector2f getPos();
-	sf::Vector2i getTargetPos();
+	sf::CircleShape GetSprite() const;
+	sf::Vector2f getPos() const;
+	sf::Vector2i getTargetPos() const;
+	sf::Vector2i getCurrentPos() const;
+
+	bool GetCanAttack() const;
 
 	int getScore();
 	

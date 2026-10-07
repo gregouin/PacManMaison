@@ -8,14 +8,23 @@ void Player::TakeACoin(Tilemap &tilemap)
 
 }
 
+void Player::TakeAPacGum(Tilemap& tilemap)
+{
+	tilemap.GetCodeMap()[m_targetPosition.y][m_targetPosition.x] = ' ';
+	canAttack = true;
+	std::cout << " PacMan peux manger" << std::endl;
+	CoolDown.restart();
+}
+
 Player::Player()
 {
+	canAttack = false;
+	CoolDown.start();
+
 	m_sprite.setRadius(20);
-	
 	m_position = { 40,40 };
 	m_sprite.setPosition(m_position);
 	m_targetPosition = { 1,1 };
-	t = { 0.04f,0.04f };
 	m_score = 0;
 	m_dir = none;
 }
@@ -58,12 +67,27 @@ void Player::targetTo(const Direction& dir)
 
 void Player::move(Tilemap& tilemap)
 {
+	if (CoolDown.getElapsedTime().asSeconds()>=7)
+	{
+		std::cout << " PacMan peux plus manger" << std::endl;
+		CoolDown.reset();
+		CoolDown.stop();
+		canAttack = false;
+	}
 	sf::Vector2i currentTile(
 		static_cast<int>(std::round(m_position.x / 40.0f)),
 		static_cast<int>(std::round(m_position.y / 40.0f))
 	);
 
 	if (currentTile == m_targetPosition) {
+		if (tilemap.IsACoin(currentTile))
+		{
+			TakeACoin(tilemap);
+		}
+		else if (tilemap.IsAPacGum(currentTile))
+		{
+			TakeAPacGum(tilemap);
+		}
 		switch (m_dir)
 		{
 		case Player::north:
@@ -72,20 +96,13 @@ void Player::move(Tilemap& tilemap)
 			{
 				m_targetPosition.y++;
 			}
-			if (tilemap.IsACoin(m_targetPosition))
-			{
-				TakeACoin(tilemap);
-			}
+			
 			break;
 		case Player::south:
 			m_targetPosition.y++;
 			if (tilemap.IsAWall(m_targetPosition))
 			{
 				m_targetPosition.y--;
-			}
-			if (tilemap.IsACoin(m_targetPosition))
-			{
-				TakeACoin(tilemap);
 			}
 			break;
 		case Player::east:
@@ -100,10 +117,6 @@ void Player::move(Tilemap& tilemap)
 			if (tilemap.IsAWall(m_targetPosition))
 			{
 				m_targetPosition.x++;
-			}
-			if (tilemap.IsACoin(m_targetPosition))
-			{
-				TakeACoin(tilemap);
 			}
 
 
@@ -121,12 +134,6 @@ void Player::move(Tilemap& tilemap)
 			{
 				m_targetPosition.x--;
 			}
-			if (tilemap.IsACoin(m_targetPosition))
-			{
-				TakeACoin(tilemap);
-
-			}
-
 			break;
 		default:
 			break;
@@ -148,6 +155,7 @@ void Player::move(Tilemap& tilemap)
 		if (delta.y != 0.0f) m_position.y += (delta.y > 0 ? 1.0f : -1.0f) * vitesse;
 	}
 
+	
 	m_sprite.setPosition(m_position);
 }
 	// ancienne version avec un mouvement lerp
@@ -164,19 +172,32 @@ void Player::move(Tilemap& tilemap)
 	m_sprite.setPosition(m_position);*/
 
 
-sf::CircleShape Player::GetSprite()
+sf::CircleShape Player::GetSprite() const
 {
 	return m_sprite;
 }
 
-sf::Vector2f Player::getPos()
+sf::Vector2f Player::getPos() const
 {
 	return m_position;
 }
 
-sf::Vector2i Player::getTargetPos()
+sf::Vector2i Player::getTargetPos() const 
 {
 	return m_targetPosition;
+}
+
+sf::Vector2i Player::getCurrentPos() const
+{
+	return sf::Vector2i(
+		static_cast<int>(std::round(m_position.x / 40.0f)),
+		static_cast<int>(std::round(m_position.y / 40.0f))
+	);;
+}
+
+bool Player::GetCanAttack() const
+{
+	return canAttack;
 }
 
 int Player::getScore()
