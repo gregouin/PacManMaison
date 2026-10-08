@@ -35,6 +35,7 @@ int main()
     Ennemy Blinky(Ennemy::Couleur::rouge);
     Ennemy Pinky(Ennemy::Couleur::rose);
     Ennemy Inky(Ennemy::Couleur::bleu);
+    Ennemy Clyde(Ennemy::Couleur::orange);
 
 
     while (window.isOpen())
@@ -69,13 +70,17 @@ int main()
         }
 
         player.move(testmap);
+
         Blinky.move(player,Blinky);
         Pinky.move(player,Blinky);
         Inky.move(player, Blinky);
+        //Clyde.move(player, Blinky);
 
         Pinky.IsDead(player);
         Blinky.IsDead(player);
         Inky.IsDead(player);
+        Clyde.IsDead(player);
+
         window.clear(sf::Color::Black);
         window.draw(map);
         window.draw(player.GetSprite());
@@ -97,9 +102,12 @@ int main()
             }
         }
         window.draw(Score);
+
         window.draw(Blinky.GetSprite());
         window.draw(Pinky.GetSprite());
         window.draw(Inky.GetSprite());
+        window.draw(Clyde.GetSprite());
+
         window.display();
     }
 }
